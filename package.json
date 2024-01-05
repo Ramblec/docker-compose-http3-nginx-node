@@ -7,6 +7,6 @@
     "start": "node index.js"
   },
   "keywords": ["node","nginx","docker","ingress"],
-  "author": "restuwahyu13",
+  "author": "Ramblec",
   "license": "MIT"
 }
