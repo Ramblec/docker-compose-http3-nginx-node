@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  #####################
+  ### WebApp Nodejs
+  #####################
+  webapp:
+    restart: unless-stopped
+    build: .
+##    Uncomment this if you want to expose app too.
+##    ports:
+##    - 3000:${WEBAPP_PORT}
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - node_network
+
+  #####################
+  ### Nginx Proxy
+  #####################
+  proxy:
+    image: nwtgck/nginx-http3
+    restart: unless-stopped
+    build: ./nginx
+    #image: nginx
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    depends_on:
+      - webapp
+    volumes:
+      - ./nginx/default.conf:/usr/local/nginx/conf/nginx.conf
+      - ./nginx/ssl/server.crt:/etc/ssl/certs/server.crt
+      - ./nginx/ssl/server.key:/etc/ssl/private/server.key
+    networks:
+      - node_network
+
+networks:
+  node_network:
